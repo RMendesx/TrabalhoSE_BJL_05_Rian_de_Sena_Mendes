@@ -31,8 +31,6 @@
 
 #define LED_PIN 7
 
-#define tam_quad 10
-
 typedef struct
 {
     uint16_t x_pos;
