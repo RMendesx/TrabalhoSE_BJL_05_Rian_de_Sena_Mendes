@@ -1,16 +1,19 @@
 #include <stdio.h>
 #include "pico/stdlib.h"
+
 #include "hardware/gpio.h"
 #include "hardware/adc.h"
 #include "hardware/i2c.h"
 #include "hardware/pio.h"
 #include "hardware/clocks.h"
 #include "hardware/pwm.h"
+
 #include "lib/ssd1306.h"
 #include "lib/font.h"
 #include "lib/matriz_led.h"
 #include "lib/led.h"
 #include "lib/buzzer.h"
+
 #include "FreeRTOS.h"
 #include "task.h"
 #include "queue.h"
@@ -43,10 +46,10 @@ typedef struct
     uint16_t y_per;
 } percentage_data_t;
 
-QueueHandle_t xQueueJoystickData;
-QueueHandle_t xQueuePercentageData;
+QueueHandle_t xQueueJoystickData;   // Fila para dados do joystick
+QueueHandle_t xQueuePercentageData; // Fila para dados percentuais
 
-int normalize(int val, int min, int max);
+int normalize(int val, int min, int max); // Declaração da função de normalização
 
 void vJoystickTask(void *params)
 {
@@ -69,7 +72,8 @@ void vJoystickTask(void *params)
     }
 }
 
-void vDisplayTask(void *params)
+// Task para o display
+void vDisplayTask(void *params) 
 {
     i2c_init(I2C_PORT, 400 * 1000);
     gpio_set_function(I2C_SDA, GPIO_FUNC_I2C);
@@ -137,6 +141,7 @@ void vDisplayTask(void *params)
     }
 }
 
+// Task para o LED
 void vLedTask(void *params)
 {
     joystick_data_t joydata;
@@ -164,6 +169,7 @@ void vLedTask(void *params)
     }
 }
 
+// Task para o buzzer
 void vBuzzerTask(void *params)
 {
     joystick_data_t joydata;
@@ -198,6 +204,7 @@ void vBuzzerTask(void *params)
     }
 }
 
+// Task para a matriz de LEDs
 void vMatrizTask(void *params)
 {
     joystick_data_t joydata;
